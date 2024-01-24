@@ -399,8 +399,9 @@ TEST(Determinant, det6) {
 }
 
 TEST(Transpose, tran1) {
-    S21Matrix a;
-    a.FillMatrix(MAT12, 9);
+    S21Matrix a, c;
+    c.FillMatrix(MAT12, 9);
+    a = c;
     try {
         S21Matrix b = a.Transpose();
         EXPECT_DOUBLE_EQ(b(0,0), 2);
@@ -633,6 +634,17 @@ TEST(sum_eq_op, sum_eq_op) {
   EXPECT_DOUBLE_EQ(a(2, 2), -2);
 }
 
+TEST(sum_eq_op, sum_eq_op_err) {
+  S21Matrix a(2, 3), b;
+  a.FillMatrix(MAT11, 6);
+  b.FillMatrix(MAT12, 9);
+  try {
+        a += b;
+  } catch (exception &e) {
+        EXPECT_STREQ("The size of the matrices is different", e.what());
+  }
+}
+
 TEST(sub_eq_op, sub_eq_op) {
   S21Matrix a, b;
   a.FillMatrix(MAT11, 9);
@@ -647,6 +659,17 @@ TEST(sub_eq_op, sub_eq_op) {
   EXPECT_DOUBLE_EQ(a(2, 0), 0);
   EXPECT_DOUBLE_EQ(a(2, 1), 4);
   EXPECT_DOUBLE_EQ(a(2, 2), 4);
+}
+
+TEST(sub_eq_op, sub_eq_op_err) {
+  S21Matrix a(2, 3), b;
+  a.FillMatrix(MAT11, 6);
+  b.FillMatrix(MAT12, 9);
+  try {
+        a -= b;
+  } catch (exception &e) {
+        EXPECT_STREQ("The size of the matrices is different", e.what());
+  }
 }
 
 TEST(mul_num_eq_op, mul_num_eq_op) {
